@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>供应商资质与食品安全查询导航</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.9)), 
+                        url('https://images.unsplash.com/photo-1506744038136-46273834b3fb') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0 30px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #2d5a27;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7);
+        }
+        
+        h1 i {
+            color: #4caf50;
+        }
+        
+        .subtitle {
+            color: #5a7d5a;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.7;
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 15px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #8bc34a;
+        }
+        
+        .search-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 18px;
+            padding: 35px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.15);
+            border: 1px solid rgba(139, 195, 74, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .search-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            color: #2d5a27;
+            font-size: 1.5rem;
+        }
+        
+        .search-title i {
+            color: #4caf50;
+        }
+        
+        .search-form {
+            display: flex;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            border: 2px solid #c8e6c9;
+            border-radius: 12px 0 0 12px;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #f9fdf9;
+        }
+        
+        .search-input:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        .search-button {
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            color: white;
+            border: none;
+            padding: 0 35px;
+            border-radius: 0 12px 12px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-button:hover {
+            background: linear-gradient(135deg, #43a047, #7cb342);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .links-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.15);
+            border: 1px solid rgba(139, 195, 74, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .links-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            color: #2d5a27;
+            font-size: 1.5rem;
+        }
+        
+        .links-title i {
+            color: #8bc34a;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .link-card {
+            background: linear-gradient(135deg, #f9fdf9, #f1f8e9);
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            border: 2px solid #e8f5e9;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .link-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(139, 195, 74, 0.2);
+            border-color: #a5d6a7;
+        }
+        
+        .link-card:hover::before {
+            transform: translateY(0);
+        }
+        
+        .link-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            color: #388e3c;
+            flex-shrink: 0;
+        }
+        
+        .link-content {
+            flex-grow: 1;
+        }
+        
+        .link-title {
+            font-weight: 600;
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+            color: #1b5e20;
+        }
+        
+        .link-desc {
+            color: #689f38;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .link-arrow {
+            color: #a5d6a7;
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .link-card:hover .link-arrow {
+            transform: translateX(5px);
+            color: #4caf50;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px;
+            color: #5a7d5a;
+            font-size: 0.95rem;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 195, 74, 0.2);
+        }
+        
+        .notice {
+            background-color: rgba(255, 248, 225, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            border-left: 5px solid #ffb300;
+        }
+        
+        .notice-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #f57c00;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            background-color: #e8f5e9;
+            color: #388e3c;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+                padding: 12px 20px;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                border-radius: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .search-button {
+                border-radius: 12px;
+                justify-content: center;
+                padding: 16px;
+            }
+            
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .link-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-leaf"></i> 供应商资质与食品安全查询导航</h1>
+            <p class="subtitle">专注于供应商资质审核与食品安全监管的一站式查询平台，提供食品生产、经营许可、企业信用、质量标准等权威信息查询</p>
+        </header>
+        
+        <section class="search-section">
+            <h2 class="search-title"><i class="fas fa-search"></i> 百度搜索</h2>
+            <form class="search-form" id="searchForm" action="https://www.baidu.com/s" method="get" target="_blank">
+                <input type="text" class="search-input" name="wd" placeholder="请输入供应商名称、食品类别或关键词..." required>
+                <button type="submit" class="search-button">
+                    <i class="fas fa-search"></i> 百度搜索
+                </button>
+            </form>
+        </section>
+        
+        <section class="links-section">
+            <h2 class="links-title"><i class="fas fa-shield-alt"></i> 供应商资质与食品安全查询</h2>
+            <div class="links-grid" id="linksContainer">
+                <!-- 链接将通过JavaScript动态生成 -->
+            </div>
+        </section>
+        
+        <div class="notice">
+            <h3 class="notice-title"><i class="fas fa-info-circle"></i> 使用说明</h3>
+            <p>1. 在搜索框中输入供应商名称、食品类别等关键词可直接使用百度搜索相关信息<br>
+               2. 点击下方卡片可跳转到对应的官方查询网站，获取权威的供应商资质和食品安全信息<br>
+               3. 本导航站专注于供应商资质审核与食品安全监管查询，为采购决策和风险控制提供参考</p>
+        </div>
+        
+        <footer>
+            <p>© 2023 供应商资质与食品安全查询导航 | 专注于食品供应链质量安全监管 | 本网站为导航工具，查询结果以各官方网站为准</p>
+        </footer>
+    </div>
+
+    <script>
+        // 供应商资质与食品安全查询链接数据
+        const qualificationLinks = [
+            {
+                title: "国家企业信用信息公示系统",
+                description: "查询供应商工商注册信息、行政处罚、经营异常、严重违法等信用记录",
+                url: "http://www.gsxt.gov.cn",
+                icon: "fas fa-building",
+                category: "企业信用"
+            },
+            {
+                title: "信用中国",
+                description: "国家公共信用信息中心，查询企业信用信息、行政处罚、守信激励等",
+                url: "https://www.creditchina.gov.cn/",
+                icon: "fas fa-landmark",
+                category: "企业信用"
+            },
+            {
+                title: "食品生产许可信息查询",
+                description: "查询食品生产企业的许可证信息、生产范围、产品明细等资质信息",
+                url: "http://spscxkcx.gsxt.gov.cn/spscxkcx/spscxkcxindex.xhtml",
+                icon: "fas fa-industry",
+                category: "生产许可"
+            },
+            {
+                title: "食品经营许可信息查询",
+                description: "查询食品经营（销售、餐饮服务）企业的许可证和经营项目信息",
+                url: "http://spjyxk.gsxt.gov.cn/",
+                icon: "fas fa-store",
+                category: "经营许可"
+            },
+            {
+                title: "食品伙伴网食品数据库",
+                description: "食品标准法规、添加剂、污染物、农药残留等食品安全数据查询",
+                url: "https://db.foodmate.net/",
+                icon: "fas fa-database",
+                category: "食品安全"
+            },
+            {
+                title: "食品伙伴网添加剂查询",
+                description: "查询食品添加剂使用标准、允许使用品种、最大使用量等信息",
+                url: "https://db.foodmate.net/additive/",
+                icon: "fas fa-flask",
+                category: "食品添加剂"
+            },
+            {
+                title: "食品伙伴网标准查询",
+                description: "查询食品安全国家标准、行业标准、地方标准、企业标准等",
+                url: "https://db.foodmate.net/standard/",
+                icon: "fas fa-file-alt",
+                category: "食品安全标准"
+            },
+            {
+                title: "动物检疫合格证明查询",
+                description: "查询动物及动物产品检疫合格证明、检疫标志、检疫结果等信息",
+                url: "https://jckspj.customs.gov.cn/",
+                icon: "fas fa-paw",
+                category: "动物检疫"
+            },
+            {
+                title: "农产品质量安全追溯平台",
+                description: "查询农产品从生产到销售的全链条追溯信息，确保源头安全",
+                url: "http://www.qsst.moa.gov.cn/",
+                icon: "fas fa-seedling",
+                category: "农产品追溯"
+            },
+            {
+                title: "进口食品境外生产企业注册",
+                description: "查询境外食品生产企业在中国海关总署的注册备案信息",
+                url: "https://ciferquery.singlewindow.cn/",
+                icon: "fas fa-globe-asia",
+                category: "进口食品"
+            },
+            {
+                title: "有机产品认证查询系统",
+                description: "查询有机产品认证证书、认证机构、获证企业及产品信息",
+                url: "http://food.cnca.cn/",
+                icon: "fas fa-leaf",
+                category: "有机认证"
+            },
+            {
+                title: "绿色食品标志使用查询",
+                description: "查询绿色食品标志使用企业、产品及证书有效期等信息",
+                url: "http://www.greenfood.agri.cn/",
+                icon: "fas fa-recycle",
+                category: "绿色食品"
+            },
+            {
+                title: "综合认证结果查询",
+                description: "查询各类管理体系认证、产品认证、服务认证等综合认证结果",
+                url: "http://cx.cnca.cn/CertECloud/result/skipResultList",
+                icon: "fas fa-certificate",
+                category: "认证查询"
+            },
+            {
+                title: "检验报告查询系统",
+                description: "查询第三方检测机构出具的检验检测报告真伪及详细信息",
+                url: "https://www.cnca.gov.cn/xwdt/tzgg/202112/t20211217_61659.shtml",
+                icon: "fas fa-file-contract",
+                category: "检验报告"
+            },
+            {
+                title: "食品添加剂使用标准查询",
+                description: "查询GB 2760食品添加剂使用标准，包括允许使用的添加剂种类和限量",
+                url: "http://db.foodmate.net/2760/",
+                icon: "fas fa-vial",
+                category: "添加剂标准"
+            },
+            {
+                title: "食品安全抽检结果查询",
+                description: "查询国家及地方市场监督管理局发布的食品安全抽检结果信息",
+                url: "https://spcjsac.gsxt.gov.cn/",
+                icon: "fas fa-search",
+                category: "质量抽检"
+            },
+            {
+                title: "食品相关产品生产许可",
+                description: "查询食品包装材料、容器、工具等食品相关产品生产许可信息",
+                url: "http://118.178.119.26:8080/",
+                icon: "fas fa-box",
+                category: "包材许可"
+            },
+            {
+                title: "国家标准全文公开系统",
+                description: "查询食品安全国家标准（GB系列）、产品质量标准等国家标准全文",
+                url: "http://openstd.samr.gov.cn/bzgk/gb/",
+                icon: "fas fa-flag",
+                category: "国家标准"
+            },
+            {
+                title: "食品接触材料标准查询",
+                description: "查询食品接触材料及制品相关国家标准和安全要求",
+                url: "https://members.wto.org/crnattachments/2020/SPS/CHN/20_2108_00_c.pdf",
+                icon: "fas fa-utensils",
+                category: "接触材料"
+            },
+            {
+                title: "特殊食品注册查询",
+                description: "查询婴幼儿配方食品、特殊医学用途配方食品等注册信息",
+                url: "https://www.samr.gov.cn/tssps/",
+                icon: "fas fa-baby",
+                category: "特殊食品"
+            },
+            {
+                title: "餐饮服务食品安全等级",
+                description: "查询餐饮服务单位的食品安全量化分级管理等级（A、B、C级）",
+                url: "http://www.gsxt.gov.cn/corp-query-homepage.html",
+                icon: "fas fa-utensil-spoon",
+                category: "餐饮等级"
+            },
+            {
+                title: "食品检验机构资质查询",
+                description: "查询具备资质的食品检验检测机构及认可范围信息",
+                url: "https://www.cnas.org.cn/",
+                icon: "fas fa-microscope",
+                category: "检测机构"
+            }
+        ];
+
+        // 生成链接卡片
+        function renderLinks() {
+            const container = document.getElementById('linksContainer');
+            container.innerHTML = '';
+            
+            qualificationLinks.forEach(link => {
+                const linkCard = document.createElement('a');
+                linkCard.href = link.url;
+                linkCard.className = 'link-card';
+                linkCard.target = '_blank';
+                linkCard.title = `点击访问：${link.title}`;
+                
+                linkCard.innerHTML = `
+                    <div class="link-icon">
+                        <i class="${link.icon}"></i>
+                    </div>
+                    <div class="link-content">
+                        <div class="link-title">${link.title}</div>
+                        <div class="link-desc">${link.description}</div>
+                        <div class="category-badge">${link.category}</div>
+                    </div>
+                    <div class="link-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                `;
+                
+                container.appendChild(linkCard);
+            });
+        }
+
+        // 搜索表单提交处理
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            const searchInput = this.querySelector('.search-input');
+            if (!searchInput.value.trim()) {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.placeholder = "请输入搜索关键词...";
+                return false;
+            }
+        });
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderLinks();
+            
+            // 为所有外部链接添加点击提示
+            const externalLinks = document.querySelectorAll('.link-card');
+            externalLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const title = this.querySelector('.link-title').textContent;
+                    console.log(`跳转到供应商资质查询：${title}`);
+                });
+            });
+            
+            // 添加页面加载动画
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
